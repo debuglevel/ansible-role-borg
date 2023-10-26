@@ -1,0 +1,11 @@
+[Unit]
+Description=Run borgmatic
+
+[Timer]
+# "hourly" is "*-*-* *:00:00"
+OnCalendar=hourly
+
+#RandomizedDelaySec=3h
+
+[Install]
+WantedBy=timers.target

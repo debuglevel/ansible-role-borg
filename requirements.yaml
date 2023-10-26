@@ -1,0 +1,14 @@
+---
+collections:
+  - name: community.docker
+    version: 2.1.1
+  - name: ansible.posix  # TODO: Was somehow needed in devcontainer.
+    version: 1.5.4
+
+roles:
+  # - name: diodonfrost.python
+  #   version: 1.0.0
+  - name: geerlingguy.docker
+    version: 7.0.1
+  - name: geerlingguy.pip
+    version: 2.2.0

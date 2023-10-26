@@ -1,0 +1,116 @@
+---
+- name: Ensure borgmatic
+  include_tasks: borgmatic-installation-{{ borg__borgmatic_installation_method }}.yaml
+
+- name: Ensure configuration
+  block:
+    - name: Ensure /etc/borgmatic directory
+      ansible.builtin.file:
+        path: /etc/borgmatic
+        state: directory
+        mode: '640'
+
+    - name: Ensure configuration file
+      ansible.builtin.template:
+        src: borgmatic.yaml.j2
+        dest: /etc/borgmatic/config.yaml
+        mode: '640'
+
+# TODO: Rename SSH key on the host to also contain the hostname;
+#       right now it is just `id_...` which is confusing because one could assume they all got the same.
+- name: Ensure SSH key
+  block:
+    - name: Ensure SSH key directory
+      ansible.builtin.file:
+        path: "{{ borg__ssh_key_path | dirname }}"
+        state: directory
+        owner: root
+        group: root
+        mode: '0700'
+
+    - name: Ensure SSH private key
+      ansible.builtin.copy:
+        src: "borg/{{ inventory_hostname }}_id_ed25519"
+        dest: "{{ borg__ssh_key_path }}"
+        owner: root
+        group: root
+        mode: '0400'
+
+    - name: Ensure SSH public key
+      ansible.builtin.copy:
+        src: "borg/{{ inventory_hostname }}_id_ed25519.pub"
+        dest: "{{ borg__ssh_key_path }}.pub"
+        owner: root
+        group: root
+        mode: '0444'
+
+- name: Ensure backup destination is a known SSH host
+  ansible.builtin.known_hosts:
+    name: "[{{ item.host }}]:{{ item.port }}"
+    key: "[{{ item.host }}]:{{ item.port }} {{ item.key.type }} {{ item.key.fingerprint }}"
+    #path: /etc/ssh/ssh_known_hosts
+    path: /root/.ssh/known_hosts
+    state: present
+  loop: "{{ borg__destinations }}"
+  when:
+    - item.type == "ssh"
+
+# TODO: Would be better if we could check if the repository is already initialized and only do the whole waiting thing if not.
+- name: Ensure repository initialization
+  block:
+    # Needed for community.general.pids
+    - name: Ensure python3-psutil apt package
+      become: true
+      ansible.builtin.apt:
+        state: present
+        update_cache: true
+        cache_valid_time: 3600  # Do not update if already done in the last hour.
+        pkg:
+          - python3-psutil
+
+    - name: Getting borg and borgmatic process IDs...
+      community.general.pids:
+        pattern: .*borg.*
+      register: borg_pids
+
+    - name: Wait for all borg and borgmatic processes to exit...
+      ansible.builtin.wait_for:
+        path: "/proc/{{ item }}/status"
+        state: absent
+        timeout: 1800  # 30 minutes
+      with_items: "{{ borg_pids.pids }}"
+
+    - name: Initialize repository (if needed)...
+      become: true
+      ansible.builtin.command:
+        cmd: /root/.local/bin/borgmatic init --verbosity 2 --config /etc/borgmatic/config.yaml --encryption repokey
+      register: borgmatic_init
+      changed_when: "'Repository already exists' not in borgmatic_init.stdout"
+
+- name: Ensure systemd integration
+  block:
+    - name: Ensure systemd unit file
+      ansible.builtin.copy:
+        src: borgmatic.service
+        dest: /etc/systemd/system/
+        owner: root
+        group: root
+        mode: "0644"
+
+    - name: Ensure systemd timer file
+      ansible.builtin.copy:
+        src: borgmatic.timer
+        dest: /etc/systemd/system/
+        owner: root
+        group: root
+        mode: "0644"
+
+    - name: Reload systemd units
+      ansible.builtin.systemd:
+        daemon_reload: true
+
+    - name: Enable service
+      ansible.builtin.service:
+        name: borgmatic.timer
+        state: started
+        enabled: true

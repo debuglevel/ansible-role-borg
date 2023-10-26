@@ -1,0 +1,66 @@
+---
+# borg executable on the remote.
+# State the full name including the version instead of the `borg` symlink to avoid compatibility issues.
+borg__remote_executable: borg-1.2
+
+# How to install borg.
+# Choose between `apt-pipx` and `docker`.
+borg__borgmatic_installation_method: apt-pipx
+
+# borgmatic version to install.
+borg__borgmatic_version: "1.8.2"
+
+# Source directories which should be backuped.
+# TODO: This probably does not merge anything from defaults, group_vars and host_vars but just replaces it somehow.
+#       Maybe just put it in host_vars and modify it by hand?
+borg__source_directories:
+  - /etc
+
+# Destinations where the repositories are located.
+borg__destinations: []
+# borg__destinations:
+#  - host: some-server.example
+#    port: 22
+#    type: ssh
+#    repository: "ssh://u253621-sub3@some-server.example:22/./BorgBackup/{{ inventory_hostname }}"
+#    key:  # Must be present if `type` is `ssh`.
+#      type: ecdsa-sha2-nistp521  # SSH public key type of the repository host; should match the type of the SSH private key.
+#      fingerprint: 'AAAA....'  # SSH fingerprint of the repository host.
+
+# Hooks
+borg__hooks_before_everything: []
+
+# Passphrase for the repository/repokey
+# This is unset by default so that Ansible will just throw some error instead of using some default passphrase.
+#borg__encryption_passphrase: 
+
+# How much data should be compressed.
+# "auto" refers to borg's "is compression useful"-heuristics.
+# Change the compression according to your needs;
+# it might be better to set it to e.g. 5 if there is plenty of upstream bandwith and storage space.
+borg__compression: auto,zstd,19
+
+# Upload rate limit in kiBytes/second.
+borg__upload_rate_limit: 0
+
+# The SSH private key borg will use.
+# Must have no passphrase.
+# The role will copy files named `{{ inventory_hostname }}_id_ed25519` and `{{ inventory_hostname }}_id_ed25519.pub` to this path.
+# (The .pub path is determined automatically.)
+borg__ssh_key_path: /root/.ssh/borg_id_ed25519
+
+# The `ssh` command borg should use.
+# This default uses the SSH key defined in `borg__ssh_key_path`.
+borg__ssh_command: "ssh -i {{ borg__ssh_key_path }}"
+
+# How long archives should be kept in the repository.
+# After this period, borgmatic will issue a `borg delete` on these archives.
+# Note that in case of the append-only mode, the space is not actually freed.
+borg__retention_within: 48H  # Keep all archives within this period, no matter what the next settings state.
+borg__retention_daily: 7  # Keep the last <number> daily archives.
+borg__retention_weekly: 4  # Keep the last <number> weekly archives.
+borg__retention_monthly: 12  # Keep the last <number> monthly archives.
+borg__retention_yearly: 2  # Keep the last <number> yearly archives.
+
+# Lock wait
+borg__lock_wait: 60

@@ -1,0 +1,80 @@
+---
+- name: Converge
+  hosts: all
+  # # On Ubuntu 16.04, install Python 3.8 first.
+  # # TODO: Will fail on borg/borgmatic as OpenSSL is too old.
+  # roles:
+  #   - role: diodonfrost.python
+  #     vars:
+  #       python_version: "3.8.9"
+  #     when: ansible_distribution == 'Ubuntu' and ansible_distribution_release == 'xenial'
+
+  tasks:
+    # # NOTE: Install docker if borg__borgmatic_installation_method == docker. (Does not work)
+    # - name: "Create 99unauth file"  # Docker installation would fail on Ubuntu 16.04 without this.
+    #   become: true
+    #   ansible.builtin.copy:
+    #     content: "APT::Get::AllowUnauthenticated \"true\";"
+    #     dest: "/etc/apt/apt.conf.d/99unauth"
+    # - name: "Update apt cache"
+    #   become: true
+    #   ansible.builtin.apt:
+    #     update_cache: true
+    #     cache_valid_time: 3600  # Do not update if already done in the last hour.
+    # - name: "Install pip docker package"
+    #   ansible.builtin.include_role:
+    #     name: "geerlingguy.pip"
+    #   vars:
+    #     pip_install_packages:
+    #       - name: docker
+    #   #when: "{{ borg__borgmatic_installation_method }} == 'docker'"  # XXX: Variable not yet known
+    # - name: "Install docker"
+    #   ansible.builtin.include_role:
+    #     name: "geerlingguy.docker"
+    #   #when: "{{ borg__borgmatic_installation_method }} == 'docker'"  # XXX: Variable not yet known
+
+    # - name: Install Docker
+    #   become: true
+    #   ansible.builtin.apt:
+    #     name:
+    #       - apt-transport-https
+    #       - ca-certificates
+    #       - curl
+    #       - gnupg-agent
+    #       - software-properties-common
+    #     update_cache: yes
+    #   when: ansible_distribution == 'Ubuntu'
+    #
+    # - name: Add Docker GPG key
+    #   become: true
+    #   ansible.builtin.apt_key:
+    #     url: https://download.docker.com/linux/ubuntu/gpg
+    #   when: ansible_distribution == 'Ubuntu'
+    #
+    # - name: Add Docker repository
+    #   become: true
+    #   ansible.builtin.apt_repository:
+    #     repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable
+    #     state: present
+    #   when: ansible_distribution == 'Ubuntu'
+    #
+    # - name: Install Docker Compose
+    #   become: true
+    #   ansible.builtin.shell: |
+    #     curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+    #     chmod +x /usr/local/bin/docker-compose
+    #   when: ansible_distribution == 'Ubuntu'
+
+
+
+    - name: "Include debuglevel.borg"
+      ansible.builtin.include_role:
+        name: "debuglevel.borg"
+      vars:
+        borg__encryption_passphrase: "TEST"
+        borg__ssh_key_path: "/tmp/sshkey/id_ed25519"
+        borg__destinations:
+          - host: some-server.example
+            port: 22
+            type: local
+            repository: "/tmp/{{ inventory_hostname }}"

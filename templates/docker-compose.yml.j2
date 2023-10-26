@@ -1,0 +1,15 @@
+version: '3'
+services:
+  borgmatic:
+    image: ghcr.io/borgmatic-collective/borgmatic:{{ borg__borgmatic_version }}
+    container_name: borgmatic
+    volumes:
+      - /:/mnt/source:ro            # backup source
+      #- ${VOLUME_TARGET}:/mnt/borg-repository      # backup target
+      - /etc/borgmatic/:/etc/borgmatic/  # borgmatic config file(s) + crontab.txt
+      - /root/.borgmatic:/root/.borgmatic # borgmatic state files
+      - /root/.config/borg:/root/.config/borg   # config and keyfiles
+      - /root/.ssh:/root/.ssh                   # ssh key for remote repositories
+      - /root/.cache/borg:/root/.cache/borg     # checksums used for deduplication
+    environment:
+      - TZ=Europe/Berlin

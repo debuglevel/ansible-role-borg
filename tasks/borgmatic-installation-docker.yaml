@@ -1,0 +1,27 @@
+---
+- name: Ensure borgmatic directory
+  ansible.builtin.file:
+    path: /root/borgmatic
+    state: directory
+
+- name: Ensure docker-compose.yml file
+  ansible.builtin.template:
+    src: docker-compose.yml.j2
+    dest: /root/borgmatic/docker-compose.yml
+
+- name: Ensure borgmatic-wrapper.sh file
+  ansible.builtin.copy:
+    src: borgmatic-wrapper.sh
+    dest: /root/borgmatic/borgmatic-wrapper.sh
+    mode: '0755'
+
+- name: Ensure /root/.local/bin/ directory
+  ansible.builtin.file:
+    path: /root/.local/bin/
+    state: directory
+
+- name: Ensure borgmatic executable link to borgmatic-wrapper.sh
+  ansible.builtin.file:
+    src: /root/borgmatic/borgmatic-wrapper.sh
+    dest: /root/.local/bin/borgmatic
+    state: link
