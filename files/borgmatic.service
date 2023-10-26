@@ -30,7 +30,7 @@ RestrictNamespaces=yes
 RestrictRealtime=yes
 RestrictSUIDSGID=yes
 SystemCallArchitectures=native
-SystemCallFilter=@system-service
+#SystemCallFilter=@system-service  # TODO: Does not work with Ubuntu 16.04
 SystemCallErrorNumber=EPERM
 # To restrict write access further, change "ProtectSystem" to "strict" and uncomment
 # "ReadWritePaths", "ReadOnlyPaths", "ProtectHome", and "BindPaths". Then add any local repository
