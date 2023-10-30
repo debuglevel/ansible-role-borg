@@ -363,14 +363,22 @@ checks:
     #- name: repository
     #  frequency: 2 weeks
 
+    # "repository" checks the consistency of the repository.
     - name: repository
       frequency: 1 day  # Defaults to "always".
+    # "archives" checks all of the archives.
     - name: archives
       frequency: 1 week  # Defaults to "always".
-    - name: extract
-      frequency: 2 weeks
-    - name: data
-      frequency: 3 weeks
+    # "data" verifies the integrity of the data within the archives.
+    # "data" implies "archives".
+    # perform cryptographic archive data integrity verification (conflicts with --repository-only)
+    # not performed by default
+    #- name: extract
+    #  frequency: # 2 weeks
+    # "extract" does an extraction dry-run of the most recent archive.
+    # not performed by default
+    #- name: data
+    #  frequency: 3 weeks
 
 
 # Paths or labels for a subset of the configured "repositories" (see
