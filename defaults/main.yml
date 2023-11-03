@@ -29,6 +29,7 @@ borg__destinations: []
 
 # Hooks
 borg__hooks_before_everything: []
+borg__hooks_on_error: []
 
 # Passphrase for the repository/repokey
 # This is unset by default so that Ansible will just throw some error instead of using some default passphrase.
