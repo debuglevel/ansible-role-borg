@@ -464,7 +464,7 @@ checks:
 on_error:
     - "echo \"on_error hook: Error during prune/compact/create/check.\""
 {% for hook in borg__hooks_on_error %}
-    - {{ hook }}
+    - "{{ hook }}"
 {% endfor %}
 
 # List of one or more shell commands or scripts to execute before
@@ -475,7 +475,7 @@ before_everything:
     - echo "Starting actions / before_everything"
     - echo "Started at $(date -I'seconds')" >> /var/log/borgmatic.log  # busybox-compatible (which is used in the docker installation method); --iso-8601=seconds would not work.
 {% for hook in borg__hooks_before_everything %}
-    - {{ hook }}
+    - "{{ hook }}"
 {% endfor %}
 
 # List of one or more shell commands or scripts to execute after
