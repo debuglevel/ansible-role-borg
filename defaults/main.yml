@@ -8,7 +8,7 @@ borg__remote_executable: borg-1.2
 borg__borgmatic_installation_method: apt-pipx
 
 # borgmatic version to install.
-borg__borgmatic_version: "1.8.2"
+borg__borgmatic_version: "1.8.4"
 
 # Source directories which should be backuped.
 # TODO: This probably does not merge anything from defaults, group_vars and host_vars but just replaces it somehow.
