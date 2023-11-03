@@ -462,7 +462,7 @@ checks:
 # exception occurs during a "create", "prune", "compact", or "check"
 # action or an associated before/after hook.
 on_error:
-    - echo "on_error hook: Error during prune/compact/create/check."
+    - "echo \"on_error hook: Error during prune/compact/create/check.\""
 {% for hook in borg__hooks_on_error %}
     - {{ hook }}
 {% endfor %}
