@@ -401,69 +401,70 @@ checks:
 
 # List of one or more shell commands or scripts to execute before all
 # the actions for each repository.
-# before_actions:
-    # - echo Starting actions.
+before_actions:
+    - echo Executing before_actions hooks...
 
 # List of one or more shell commands or scripts to execute before
 # creating a backup, run once per repository.
-# before_backup:
-    # - echo Starting a backup.
+before_backup:
+    - echo Executing before_backup hooks...
 
 # List of one or more shell commands or scripts to execute before
 # pruning, run once per repository.
-# before_prune:
-    # - echo Starting pruning.
+before_prune:
+    - echo Executing before_prune hooks...
 
 # List of one or more shell commands or scripts to execute before
 # compaction, run once per repository.
-# before_compact:
-    # - echo Starting compaction.
+before_compact:
+    - echo Executing before_compact hooks...
 
 # List of one or more shell commands or scripts to execute before
 # consistency checks, run once per repository.
-# before_check:
-    # - echo Starting checks.
+before_check:
+    - echo Executing before_check hooks...
 
 # List of one or more shell commands or scripts to execute before
 # extracting a backup, run once per repository.
-# before_extract:
-    # - echo Starting extracting.
+before_extract:
+    - echo Executing before_extract hooks...
 
 # List of one or more shell commands or scripts to execute after
 # creating a backup, run once per repository.
-# after_backup:
-    # - echo Finished a backup.
+after_backup:
+    - echo Executing after_backup hooks...
 
 # List of one or more shell commands or scripts to execute after
 # compaction, run once per repository.
-# after_compact:
-    # - echo Finished compaction.
+after_compact:
+    - echo Executing after_compact hooks...
 
 # List of one or more shell commands or scripts to execute after
 # pruning, run once per repository.
-# after_prune:
-    # - echo Finished pruning.
+after_prune:
+    - echo Executing after_prune hooks...
 
 # List of one or more shell commands or scripts to execute after
 # consistency checks, run once per repository.
-# after_check:
-    # - echo Finished checks.
+after_check:
+    - echo Executing after_check hooks...
 
 # List of one or more shell commands or scripts to execute after
 # extracting a backup, run once per repository.
-# after_extract:
-    # - echo Finished extracting.
+after_extract:
+    - echo Executing after_extract hooks...
 
 # List of one or more shell commands or scripts to execute after all
 # actions for each repository.
-# after_actions:
-    # - echo Finished actions.
+after_actions:
+    - echo Executing after_actions hooks...
 
 
 # List of one or more shell commands or scripts to execute when an
 # exception occurs during a "create", "prune", "compact", or "check"
 # action or an associated before/after hook.
 on_error:
+    - echo Executing on_error hooks...
     - "echo \"on_error hook: Error during prune/compact/create/check.\""
 {% for hook in borg__hooks_on_error %}
     - "{{ hook }}"
@@ -474,7 +475,7 @@ on_error:
 # collected from all configuration files and then run once before all
 # of them (prior to all actions).
 before_everything:
-    - echo "Starting actions / before_everything"
+    - echo Executing before_everything hooks...
     - echo "Started at $(date -I'seconds')" >> /var/log/borgmatic.log  # busybox-compatible (which is used in the docker installation method); --iso-8601=seconds would not work.
 {% for hook in borg__hooks_before_everything %}
     - "{{ hook }}"
@@ -485,7 +486,7 @@ before_everything:
 # collected from all configuration files and then run once after all
 # of them (after any action).
 after_everything:
-    - echo "Completed actions / after_everything"
+    - echo Executing after_everything hooks...
     - echo "Ended at   $(date -I'seconds')" >> /var/log/borgmatic.log  # busybox-compatible (which is used in the docker installation method); --iso-8601=seconds would not work.
 
 # List of one or more PostgreSQL databases to dump before creating a
