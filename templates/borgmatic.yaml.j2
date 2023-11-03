@@ -470,22 +470,19 @@ checks:
 # collected from all configuration files and then run once before all
 # of them (prior to all actions).
 before_everything:
-    - echo "Starting actions."  # Just to ensure the list is not empty.
-    #- echo "Started $(date --iso-8601=seconds)" >> /var/log/borgmatic.log  # Does not work with busybox (which is used in the docker installation method)
-    - echo "Started $(date -I'seconds')" >> /var/log/borgmatic.log  # busybox-compatible
+    - echo "Starting actions / before_everything"
+    - echo "Started at $(date -I'seconds')" >> /var/log/borgmatic.log  # busybox-compatible (which is used in the docker installation method); --iso-8601=seconds would not work.
 {% for hook in borg__hooks_before_everything %}
     - {{ hook }}
 {% endfor %}
-
 
 # List of one or more shell commands or scripts to execute after
 # running all actions (if one of them is "create"). These are
 # collected from all configuration files and then run once after all
 # of them (after any action).
 after_everything:
-    - echo Completed actions.
-    #- echo "Ended   $(date --iso-8601=seconds)" >> /var/log/borgmatic.log  # Does not work with busybox (which is used in the docker installation method)
-    - echo "Ended   $(date -I'seconds')" >> /var/log/borgmatic.log  # busybox-compatible
+    - echo "Completed actions / after_everything"
+    - echo "Ended at   $(date -I'seconds')" >> /var/log/borgmatic.log  # busybox-compatible (which is used in the docker installation method); --iso-8601=seconds would not work.
 
 # List of one or more PostgreSQL databases to dump before creating a
 # backup, run once per configuration file. The database dumps are
