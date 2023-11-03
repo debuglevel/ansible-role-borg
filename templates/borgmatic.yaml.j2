@@ -201,11 +201,13 @@ upload_rate_limit: {{ borg__upload_rate_limit }}
 # Number of times to retry a failing backup before giving up. Defaults
 # to 0 (i.e., does not attempt retry).
 # retries: 3
+retries: {{ borg__retries }}
 
 # Wait time between retries (in seconds) to allow transient issues to
 # pass. Increases after each retry as a form of backoff. Defaults to 0
 # (no wait).
 # retry_wait: 10
+retry_wait: {{ borg__retry_wait }}
 
 # Directory where temporary files are stored. Defaults to $TMPDIR.
 # temporary_directory: /path/to/tmpdir

@@ -65,3 +65,9 @@ borg__retention_yearly: 2  # Keep the last <number> yearly archives.
 
 # Lock wait
 borg__lock_wait: 60
+
+# How often a failing backup should be retried.
+borg__retries: 0
+# Duration in seconds to wait between retries.
+# Increases after each retry (linear backoff).
+borg__retry_wait: 0
