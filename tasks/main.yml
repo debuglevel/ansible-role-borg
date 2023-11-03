@@ -16,6 +16,8 @@
         dest: /etc/borgmatic/config.yaml
         mode: '640'
 
+    # TODO: Run borgmatic config validate
+
 # TODO: Rename SSH key on the host to also contain the hostname;
 #       right now it is just `id_...` which is confusing because one could assume they all got the same.
 - name: Ensure SSH key
