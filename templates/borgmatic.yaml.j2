@@ -260,7 +260,7 @@ lock_wait: {{ borg__lock_wait }}
 # details. For Borg 2.x, see the output of "borg help match-archives".
 # If match_archives is not specified, borgmatic defaults to deriving
 # the match_archives value from archive_name_format.
-# match_archives: sh:{hostname}-*
+match_archives: sh:*  # Match all archives. This is necessary to enable prune on older role versions which included random container name (in case of docker deployment) as their hostname. (CAUTION: This will probably go horribly wrong if you put more than one host into one repository -- which you should not)
 
 # Bypass Borg error about a repository that has been moved. Defaults
 # to not bypassing.
