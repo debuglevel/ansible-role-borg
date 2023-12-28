@@ -3,8 +3,8 @@
 # For example, if you have a constant named "hostname" with the value
 # "myhostname", then the string "{hostname}" will be replaced with
 # "myhostname" in the configuration file.
-# constants:
-    # hostname: myhostname
+constants:
+    hostname: {{ inventory_hostname }}
     # prefix: myprefix
 
 # List of source directories and files to back up. Globs and tildes
