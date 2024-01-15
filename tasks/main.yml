@@ -70,6 +70,7 @@
         pkg:
           - python3-psutil
 
+    # TODO: This also matches things like "journalctl -u -f borgmatic". But it's probably quite difficult to only get the real processes (with all that python/pipx/docker wrappers).
     - name: Getting borg and borgmatic process IDs...
       community.general.pids:
         pattern: .*borg.*
