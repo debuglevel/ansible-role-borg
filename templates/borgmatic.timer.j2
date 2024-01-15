@@ -3,8 +3,7 @@ Description=Run borgmatic
 
 [Timer]
 OnCalendar={{ borg__borgmatic_schedule }}
-
-#RandomizedDelaySec=3h
+RandomizedDelaySec={{ borg__borgmatic_timer_randomizeddelayseconds }}
 
 [Install]
 WantedBy=timers.target

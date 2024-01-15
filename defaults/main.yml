@@ -15,6 +15,10 @@ borg__borgmatic_version: "1.8.4"
 # See https://documentation.suse.com/smart/systems-management/html/systemd-working-with-timers/index.html
 borg__borgmatic_schedule: "*-*-* *:00:00"
 
+# Adds a random delay (i.e. avoid running backups on all machines on the same time).
+# See https://man.archlinux.org/man/systemd.timer.5
+borg__borgmatic_timer_randomizeddelayseconds: "0m"
+
 # Source directories which should be backuped.
 # TODO: This probably does not merge anything from defaults, group_vars and host_vars but just replaces it somehow.
 #       Maybe just put it in host_vars and modify it by hand?
