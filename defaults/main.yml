@@ -13,7 +13,7 @@ borg__borgmatic_version: "1.8.4"
 # How often the backups should be done.
 # This is a systemd "OnCalendar" value.
 # See https://documentation.suse.com/smart/systems-management/html/systemd-working-with-timers/index.html
-borg__borgmatic_schedule: "*-*-* *:00:00"
+borg__borgmatic_timer_oncalendar: "*-*-* *:00:00"
 
 # Adds a random delay (i.e. avoid running backups on all machines on the same time).
 # See https://man.archlinux.org/man/systemd.timer.5
