@@ -2,8 +2,7 @@
 Description=Run borgmatic
 
 [Timer]
-# "hourly" is "*-*-* *:00:00"
-OnCalendar=hourly
+OnCalendar={{ borg__borgmatic_schedule }}
 
 #RandomizedDelaySec=3h
 

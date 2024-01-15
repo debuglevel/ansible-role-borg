@@ -10,6 +10,11 @@ borg__borgmatic_installation_method: apt-pipx
 # borgmatic version to install.
 borg__borgmatic_version: "1.8.4"
 
+# How often the backups should be done.
+# This is a systemd "OnCalendar" value.
+# See https://documentation.suse.com/smart/systems-management/html/systemd-working-with-timers/index.html
+borg__borgmatic_schedule: "*-*-* *:00:00"
+
 # Source directories which should be backuped.
 # TODO: This probably does not merge anything from defaults, group_vars and host_vars but just replaces it somehow.
 #       Maybe just put it in host_vars and modify it by hand?
