@@ -264,7 +264,7 @@ match_archives: sh:*  # Match all archives. This is necessary to enable prune on
 
 # Bypass Borg error about a repository that has been moved. Defaults
 # to not bypassing.
-relocated_repo_access_is_ok: true
+relocated_repo_access_is_ok: true  # TODO: This might better be a setting defaulting to false.
 
 # Bypass Borg error about a previously unknown unencrypted repository.
 # Defaults to not bypassing.
