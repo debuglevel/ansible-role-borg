@@ -6,7 +6,7 @@
 
 - name: Ensure docker-compose.yml file
   ansible.builtin.template:
-    src: docker-compose.yml.j2
+    src: docker/docker-compose.yml.j2
     dest: /root/borgmatic/docker-compose.yml
 
 - name: Ensure borgmatic-wrapper.sh file
