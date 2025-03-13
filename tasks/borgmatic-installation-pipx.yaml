@@ -20,7 +20,21 @@
     pkg:
       - python3-pip
       - python3-venv
-      - pkg-config  # Needed to install borg
+      # Needed to install or run borg
+      - python3-dev
+      - libacl1-dev
+      - libacl1
+      - libssl-dev
+      - liblz4-dev
+      - libzstd-dev
+      - libxxhash-dev
+      - build-essential
+      - pkg-config
+      - python3-pkgconfig
+      # - libfuse-dev  # Needed for llfuse
+      # - fuse  # Needed for llfuse
+      # - ibfuse3-dev  # Needed for pyfuse3
+      # - fuse3  # Needed for pyfuse3
 
 - name: Ensure pipx (via pip)
   ansible.builtin.pip:
