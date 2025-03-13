@@ -4,7 +4,7 @@
 
 - name: Ensure configuration
   block:
-    - name: Ensure /etc/borgmatic directory
+    - name: Ensure configuration directory
       ansible.builtin.file:
         path: /etc/borgmatic
         state: directory
@@ -32,6 +32,10 @@
 
     - name: Ensure SSH private key
       ansible.builtin.copy:
+        # We use inventory_hostname over ansible_fqdn.
+        # inventory_hostname takes the arbitary name defined in our inventory.
+        # ansible_fqdn takes the FQDN defined on the machine itself.
+        # TODO: Enforcing the src key filepath like this is a bit weird.
         src: "borg/{{ inventory_hostname }}_id_ed25519"
         dest: "{{ borg__ssh_key_path }}"
         owner: root
@@ -40,6 +44,7 @@
 
     - name: Ensure SSH public key
       ansible.builtin.copy:
+        # TODO: Enforcing the src key filepath like this is a bit weird.
         src: "borg/{{ inventory_hostname }}_id_ed25519.pub"
         dest: "{{ borg__ssh_key_path }}.pub"
         owner: root
@@ -50,7 +55,6 @@
   ansible.builtin.known_hosts:
     name: "[{{ item.host }}]:{{ item.port }}"
     key: "[{{ item.host }}]:{{ item.port }} {{ item.key.type }} {{ item.key.fingerprint }}"
-    #path: /etc/ssh/ssh_known_hosts
     path: /root/.ssh/known_hosts
     state: present
   loop: "{{ borg__destinations }}"
@@ -70,20 +74,21 @@
         pkg:
           - python3-psutil
 
-    # TODO: This also matches things like "journalctl -u -f borgmatic". But it's probably quite difficult to only get the real processes (with all that python/pipx/docker wrappers).
+    # TODO: This also matches things like "journalctl -u -f borgmatic".
+    #       But it's probably quite difficult to only get the real processes (with all that python/pipx/docker wrappers).
     - name: Getting borg and borgmatic process IDs...
       community.general.pids:
         pattern: .*borg.*
       register: borg_pids
 
-    - name: Wait for all borg and borgmatic processes to exit...
+    - name: Waiting for all borg and borgmatic processes to exit...
       ansible.builtin.wait_for:
         path: "/proc/{{ item }}/status"
         state: absent
         timeout: 1800  # 30 minutes
       with_items: "{{ borg_pids.pids }}"
 
-    - name: Initialize repository (if needed)...
+    - name: Initializing repository (if needed)...
       become: true
       ansible.builtin.command:
         cmd: /root/.local/bin/borgmatic init --verbosity 2 --config /etc/borgmatic/config.yaml --encryption repokey
@@ -108,6 +113,7 @@
         group: root
         mode: "0644"
 
+    # TODO: Could probably be conditional for only when the systemd files actually were changed.
     - name: Reload systemd units
       ansible.builtin.systemd:
         daemon_reload: true
