@@ -11,7 +11,7 @@
 
 - name: Ensure borgmatic-wrapper.sh file
   ansible.builtin.copy:
-    src: borgmatic-wrapper.sh
+    src: docker/borgmatic-wrapper.sh
     dest: /root/borgmatic/borgmatic-wrapper.sh
     mode: '0755'
 
