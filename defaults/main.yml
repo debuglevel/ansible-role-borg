@@ -3,6 +3,11 @@
 # State the full name including the version instead of the `borg` symlink to avoid compatibility issues.
 borg__remote_executable: borg-1.2
 
+# borg executable on the local machine.
+# This must be the full path with the `pipx` installation.
+# Can probably just be `borg` with the `docker` installation.
+borg__local_executable: /root/.local/bin/borg
+
 # How to install borg.
 # Choose between `pipx` and `docker`.
 borg__borgmatic_installation_method: pipx

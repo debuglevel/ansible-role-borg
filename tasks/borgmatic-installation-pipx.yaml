@@ -41,6 +41,7 @@
     name: pipx==1.7.1
     state: present
 
+# NOTE: Executables are placed in /root/.local/bin
 - name: Ensure borg (via pipx)
   community.general.pipx:
     name: "borgbackup=={{ borg__borg_version }}"

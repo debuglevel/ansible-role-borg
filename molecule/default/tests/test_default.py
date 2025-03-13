@@ -42,26 +42,37 @@ def test_files(host):
 #
 #     assert service.is_valid
 
-def test_commands(host):
-    """Validate commands exists."""
-    commands = [
-        "borg",
-        "borgmatic",
-    ]
-
-    for command in commands:
-        print(f"Searching for command {command}...")
-        c = host.find_command(command)
-
-# def test_executables(host):
-#     """Validate service executables exists."""
-#     executables = [
-#         "/tmp/test.sh",
+# TODO: This does not work as /root/.local/bin is not in PATH.
+# def test_commands(host):
+#     """Validate commands exists."""
+#
+#     # Find and print all files named borg and borgmatic on filesystem
+#     # for command in ["borg", "borgmatic"]:
+#     #     result = host.run(f"find / -name {command} 2>/dev/null")
+#     #     print(f">>> Files named {command}:")
+#     #     print(result.stdout)
+#
+#
+#     commands = [
+#         "borg",
+#         "borgmatic",
 #     ]
 #
-#     for executable in executables:
-#         e = host.file(executable)
-#
-#         assert e.exists
-#         assert e.is_file
-#         assert e.is_executable
+#     for command in commands:
+#         print(f"Searching for command {command}...")
+#         c = host.find_command(command)
+
+# TODO: This is tied to the pipx installation and would not work with the docker installation.
+def test_executables(host):
+    """Validate service executables exists."""
+    executables = [
+        "/root/.local/bin/borg",
+        "/root/.local/bin/borgmatic"
+    ]
+
+    for executable in executables:
+        e = host.file(executable)
+
+        assert e.exists
+        assert e.is_file
+        assert e.is_executable
