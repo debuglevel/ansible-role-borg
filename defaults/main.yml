@@ -4,8 +4,8 @@
 borg__remote_executable: borg-1.2
 
 # How to install borg.
-# Choose between `apt-pipx` and `docker`.
-borg__borgmatic_installation_method: apt-pipx
+# Choose between `pipx` and `docker`.
+borg__borgmatic_installation_method: pipx
 
 # borgmatic version to install.
 borg__borgmatic_version: "1.8.4"
