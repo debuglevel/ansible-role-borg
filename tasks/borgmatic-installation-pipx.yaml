@@ -11,7 +11,7 @@
       - borgbackup
       - borgmatic
       
-- name: Ensure python3-pip and python3-venv (via apt)
+- name: Ensure dependencies (via apt)
   become: true
   ansible.builtin.apt:
     state: present
@@ -20,6 +20,7 @@
     pkg:
       - python3-pip
       - python3-venv
+      - pkg-config  # Needed for borg
 
 - name: Ensure pipx (via pip)
   ansible.builtin.pip:
