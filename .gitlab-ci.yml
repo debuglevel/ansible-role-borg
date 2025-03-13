@@ -1,0 +1,84 @@
+---
+services:
+  - name: docker:dind
+
+variables:
+  # Disable TLS.
+  # See: https://gitlab.com/gitlab-org/gitlab-runner/issues/1350#note_199840999 and https://about.gitlab.com/2019/07/31/docker-in-docker-with-docker-19-dot-03/
+  DOCKER_TLS_CERTDIR: ""
+  DOCKER_HOST: "tcp://docker:2375"
+
+stages:
+  - lint
+  - test
+
+lint YAML:
+  stage: lint
+  needs: []
+  parallel:
+    matrix:
+      - PYTHON_VERSION:
+        - "3.10"  # Ubuntu 22.04 ships with this.
+        # - "3.11"
+        - "3.12"  # Ubuntu 24.04 ships with this.
+        # - "3.13"
+  image: python:$PYTHON_VERSION
+  script:
+    - echo "Installing dependencies..."
+    - pip3 install yamllint
+    - echo "Installed dependencies."
+
+    - echo "Linting YAML..."
+    - yamllint .
+    - echo "Linted YAML."
+  allow_failure: true
+
+lint Ansible:
+  stage: lint
+  needs: []
+  parallel:
+    matrix:
+      - PYTHON_VERSION:
+        - "3.10"  # Ubuntu 22.04 ships with this.
+        # - "3.11"
+        - "3.12"  # Ubuntu 24.04 ships with this.
+        # - "3.13"
+  image: python:$PYTHON_VERSION
+  script:
+    - echo "Installing dependencies..."
+    - pip3 install --requirement requirements.txt
+    - echo "Installed dependencies."
+
+    - echo "Linting Ansible..."
+    - ansible-lint .
+    - echo "Linted Ansible."
+  allow_failure: true
+
+molecule:
+  stage: test
+  needs: []
+  parallel:
+    matrix:
+      - MOLECULE_DISTRO:
+          - ubuntu2204
+          - ubuntu2404
+        PYTHON_VERSION:
+          - "3.10"  # Ubuntu 22.04 ships with this.
+          # - "3.11"
+          - "3.12"  # Ubuntu 24.04 ships with this.
+          # - "3.13"
+  image: python:$PYTHON_VERSION
+  variables:
+    PY_COLORS: '1'
+    ANSIBLE_FORCE_COLOR: '1'
+  script:
+    - echo "Installing dependencies..."
+    - apt-get update
+    - apt-get install -y docker.io python3-pip
+    - docker version
+    - pip3 install --requirement requirements.txt
+    - echo "Installed dependencies."
+    
+    - echo "Testing with Molecule..."
+    - molecule test --all
+    - echo "Tested with Molecule."
