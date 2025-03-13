@@ -20,7 +20,7 @@
     pkg:
       - python3-pip
       - python3-venv
-      - pkg-config  # Needed for borg
+      - pkg-config  # Needed to install borg
 
 - name: Ensure pipx (via pip)
   ansible.builtin.pip:
