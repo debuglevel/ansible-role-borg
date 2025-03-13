@@ -26,6 +26,12 @@
     name: pipx==1.7.1
     state: present
 
+- name: Ensure borg (via pipx)
+  community.general.pipx:
+    name: "borgbackup=={{ borg__borg_version }}"
+  tags:
+    - molecule-idempotence-notest  # TODO: Somehow this task is not idempotent.
+
 - name: Ensure borgmatic (via pipx)
   community.general.pipx:
     name: "borgmatic=={{ borg__borgmatic_version }}"

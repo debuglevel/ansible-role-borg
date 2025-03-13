@@ -7,6 +7,9 @@ borg__remote_executable: borg-1.2
 # Choose between `pipx` and `docker`.
 borg__borgmatic_installation_method: pipx
 
+# borg version to install.
+borg__borg_version: "1.2.8"
+
 # borgmatic version to install.
 borg__borgmatic_version: "1.8.4"
 
