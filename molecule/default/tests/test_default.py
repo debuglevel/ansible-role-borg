@@ -50,6 +50,7 @@ def test_commands(host):
     ]
 
     for command in commands:
+        print(f"Searching for command {command}...")
         c = host.find_command(command)
 
 # def test_executables(host):
